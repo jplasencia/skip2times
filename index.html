@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Skip2Times - Master multiplication tables using the proven skip counting method. A fun, engaging math learning app for kids.">
+    <title>Skip2Times - Learn Multiplication Tables</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo-container">
+                <span class="logo-icon">✕</span>
+                <h1 class="logo-text">Skip<span class="highlight">2</span>Times</h1>
+            </div>
+            <p class="tagline">Master multiplication tables with the power of skip counting!</p>
+            
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    <span class="btn-icon">📱</span>
+                    Download for Android
+                </a>
+                <a href="#features" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="floating-numbers">
+                <span class="float-num n1">3</span>
+                <span class="float-num n2">6</span>
+                <span class="float-num n3">9</span>
+                <span class="float-num n4">12</span>
+                <span class="float-num n5">15</span>
+            </div>
+            <div class="device-mockup">
+                <div class="screen">
+                    <div class="app-preview">
+                        <div class="preview-header">3 × 4 = ?</div>
+                        <div class="preview-answer">12</div>
+                        <div class="preview-hint">Skip count: 3, 6, 9, 12 ✓</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Why Skip2Times Works</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Skip Counting Method</h3>
+                <p>Learn multiplication through the proven skip counting technique. Count by 3s, 4s, 5s and more to naturally understand times tables.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔓</div>
+                <h3>Progressive Unlocking</h3>
+                <p>Master each table to unlock the next. Build confidence step by step from 2× to 12× tables.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>Timed Practice</h3>
+                <p>Challenge yourself with timed sessions. Track your progress and watch your speed improve!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🃏</div>
+                <h3>Flashcards & Quizzes</h3>
+                <p>Multiple learning modes including flashcards, multiple choice, and type-answer quizzes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Track Progress</h3>
+                <p>Visual progress tracking shows exactly which tables you've mastered and where to focus.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3>Fun Feedback</h3>
+                <p>Encouraging sounds and animations make learning feel like a game, not a chore.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How Skip Counting Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Learn the Pattern</h3>
+                    <p>First, learn to count by the number. For the 3× table: 3, 6, 9, 12, 15...</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Count Your Fingers</h3>
+                    <p>To solve 3 × 4, count four fingers while skip counting by 3s.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Find Your Answer</h3>
+                    <p>The number you land on is your answer: 3, 6, 9, <strong>12</strong> ✓</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="logo-icon-sm">✕</span>
+                <span>Skip2Times</span>
+            </div>
+            <nav class="footer-nav">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="mailto:support@skip2times.com">Contact</a>
+            </nav>
+            <p class="copyright">© 2024 Skip2Times. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
