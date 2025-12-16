@@ -20,7 +20,9 @@
 }
 
 /* ===== Reset & Base Styles ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -62,8 +64,17 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
 }
 
 .hero-content {
@@ -90,8 +101,20 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.logo-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .logo-text {
@@ -185,15 +208,47 @@ body {
     animation: float 3s ease-in-out infinite;
 }
 
-.n1 { left: -60px; top: 20%; animation-delay: 0s; }
-.n2 { left: -40px; top: 50%; animation-delay: 0.3s; }
-.n3 { right: -60px; top: 30%; animation-delay: 0.6s; }
-.n4 { right: -40px; top: 60%; animation-delay: 0.9s; }
-.n5 { left: 50%; top: -40px; transform: translateX(-50%); animation-delay: 1.2s; }
+.n1 {
+    left: -60px;
+    top: 20%;
+    animation-delay: 0s;
+}
+
+.n2 {
+    left: -40px;
+    top: 50%;
+    animation-delay: 0.3s;
+}
+
+.n3 {
+    right: -60px;
+    top: 30%;
+    animation-delay: 0.6s;
+}
+
+.n4 {
+    right: -40px;
+    top: 60%;
+    animation-delay: 0.9s;
+}
+
+.n5 {
+    left: 50%;
+    top: -40px;
+    transform: translateX(-50%);
+    animation-delay: 1.2s;
+}
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
 }
 
 .device-mockup {
@@ -518,6 +573,12 @@ body {
 
     .logo-icon {
         font-size: 2rem;
+    }
+
+    .logo-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
     }
 
     .tagline {
