@@ -385,6 +385,9 @@ body {
     transition: all 0.3s ease;
     aspect-ratio: 9 / 19.5;
     /* iPhone aspect ratio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .screenshot-card:hover {
@@ -395,8 +398,9 @@ body {
 .screenshot-card img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
+    background: #000;
 }
 
 /* ===== How It Works Section ===== */
