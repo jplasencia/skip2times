@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_get_visible_text",
+      "WebSearch",
+      "mcp__playwright__playwright_close",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "mcp__playwright__playwright_evaluate",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}
