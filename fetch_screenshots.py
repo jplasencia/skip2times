@@ -61,65 +61,47 @@ def fetch_from_app_store_page():
     response = requests.get(APP_STORE_URL, headers=headers)
     html = response.text
 
-    screenshots = set()
+    # Use a dict to track unique screenshots by their image ID
+    # Key: unique image identifier (file path), Value: URL
+    screenshot_map = {}
 
-    # Pattern for srcset URLs (contains multiple resolutions)
-    # Extract the base URL before the size specification
-    srcset_pattern = r'(https://is\d-ssl\.mzstatic\.com/image/thumb/[^"\s]+\.(?:jpg|png))/[\dx]+bb[\d\-]*'
+    # More flexible pattern - find any mzstatic image URLs
+    pattern = r'(https://is\d-ssl\.mzstatic\.com/image/thumb/[^\s"\'<>]+?\.(?:jpg|png))'
 
-    # Direct image URL patterns
-    direct_patterns = [
-        r'https://is\d-ssl\.mzstatic\.com/image/thumb/[^\s"\'<>]+?\.(?:jpg|png)(?=[\s"\'<>]|$)',
-    ]
+    for match in re.finditer(pattern, html):
+        url = match.group(1)
+        url = url.replace('\u002F', '/')
+        url = url.rstrip(',')  # Remove trailing comma
 
-    # Find all srcset-style URLs
-    for match in re.finditer(srcset_pattern, html):
-        base_url = match.group(1)
-        base_url = base_url.replace('\u002F', '/')
-        # Add common size suffix for high quality
-        full_url = f"{base_url}/1242x2208bb.jpg"  # iPhone resolution
-        screenshots.add(full_url)
+        # Filter out unwanted images
+        if (url and
+            'AppIcon' not in url and
+            'artwork' not in url.lower() and
+            '1x1.gif' not in url and
+            'Placeholder' not in url and
+            'video-control' not in url):
 
-    # Find direct image URLs
-    for pattern in direct_patterns:
-        for match in re.finditer(pattern, html):
-            url = match.group(0)
-            url = url.replace('\u002F', '/')
-            url = url.rstrip(',')  # Remove trailing comma if present
+            # Clean the URL - remove any size/resolution specs at the end to get base URL
+            # This helps deduplicate different resolutions of the same image
+            clean_url = re.sub(r'/\d+x\d+bb[-\w]*\.?\w*$', '', url)
+            clean_url = re.sub(r'/\d+x\d+bb.*$', '', clean_url)
 
-            # Filter for screenshot-like URLs (not icons, not artwork, not placeholder)
-            if (url and
-                'AppIcon' not in url and
-                'artwork' not in url.lower() and
-                '1x1.gif' not in url and
-                'Placeholder' not in url):
-                # Clean up srcset artifacts
-                url = re.sub(r'/[\dx]+bb[\d\-]*\s*\d+w', '', url)
-                url = re.sub(r',\s*$', '', url)
-                screenshots.add(url)
+            # Add high-res suffix
+            high_res_url = f"{clean_url}/1242x2208bb.jpg"
 
-    # Also try to find in inline JSON/JavaScript
-    json_pattern = r'window\.store\s*=\s*({.+?});'
-    json_match = re.search(json_pattern, html, re.DOTALL)
-    if json_match:
-        try:
-            store_data = json.loads(json_match.group(1))
-            # Navigate the JSON to find screenshots
-            if "data" in store_data:
-                # This structure varies, so we'll do a deep search
-                json_str = json.dumps(store_data)
-                url_matches = re.findall(r'(https://is\d-ssl\.mzstatic\.com/image/thumb/[^\s"\'}\.]+\.(?:jpg|png))', json_str)
-                for url in url_matches:
-                    if 'AppIcon' not in url and 'artwork' not in url.lower():
-                        screenshots.add(url)
-        except json.JSONDecodeError:
-            pass
+            # Use the base path as the key to deduplicate
+            base_path = urlparse(clean_url).path
 
-    screenshots = list(screenshots)
+            if base_path not in screenshot_map:
+                screenshot_map[base_path] = high_res_url
+
+    # Convert to list and limit
+    screenshots = list(screenshot_map.values())[:10]
+
     if screenshots:
-        print(f"Found {len(screenshots)} potential screenshot URLs via page scrape")
+        print(f"Found {len(screenshots)} unique screenshot URLs via page scrape")
         for i, s in enumerate(screenshots[:5], 1):
-            print(f"  {i}. {s[:80]}...")
+            print(f"  {i}. {urlparse(s).path.split('/')[-2][:40]}...")
     else:
         print("No screenshots found via page scrape")
 
@@ -135,19 +117,27 @@ def download_screenshot(url, index):
         response = requests.get(url, headers=headers, timeout=10)
 
         if response.status_code == 200:
+            content = response.content
+
+            # Filter out very small files (likely errors or placeholders)
+            MIN_SIZE = 10000  # 10KB minimum
+            if len(content) < MIN_SIZE:
+                print(f"  Skipped {urlparse(url).path.split('/')[-1][:30]}... (too small: {len(content)} bytes)")
+                return False
+
             # Determine file extension
-            ext = ".jpg"
-            if ".png" in url:
-                ext = ".png"
+            ext = ".png"
+            if ".jpg" in url:
+                ext = ".jpg"
 
             filename = os.path.join(OUTPUT_DIR, f"screenshot{index}{ext}")
             with open(filename, "wb") as f:
-                f.write(response.content)
+                f.write(content)
 
-            print(f"  Downloaded: {filename} ({len(response.content)} bytes)")
+            print(f"  Downloaded: screenshot{index}{ext} ({len(content)} bytes)")
             return True
         else:
-            print(f"  Failed to download {url}: HTTP {response.status_code}")
+            print(f"  Failed to download {urlparse(url).path.split('/')[-1][:30]}...: HTTP {response.status_code}")
             return False
     except Exception as e:
         print(f"  Error downloading {url}: {e}")
