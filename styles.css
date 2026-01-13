@@ -358,7 +358,7 @@ body {
 /* ===== Screenshots Section ===== */
 .screenshots {
     padding: 5rem 2rem;
-    background: linear-gradient(180deg, var(--white), var(--ocean-light));
+    background: linear-gradient(180deg, var(--ocean-mid), var(--white));
 }
 
 .section-subtitle {
@@ -371,9 +371,9 @@ body {
 
 .screenshots-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -383,6 +383,8 @@ body {
     overflow: hidden;
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
+    aspect-ratio: 9 / 19.5;
+    /* iPhone aspect ratio */
 }
 
 .screenshot-card:hover {
@@ -392,9 +394,9 @@ body {
 
 .screenshot-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    border-radius: 1.5rem;
 }
 
 /* ===== How It Works Section ===== */
@@ -645,12 +647,24 @@ body {
         margin: 0 auto;
     }
 
+    .screenshots-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
     .container {
         padding: 2rem 1.5rem;
     }
 
     .privacy-content h1 {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .screenshots-grid {
+        grid-template-columns: 1fr;
+        max-width: 280px;
     }
 }
 
